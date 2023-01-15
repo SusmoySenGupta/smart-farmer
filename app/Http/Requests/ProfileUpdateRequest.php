@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Models\User;
+use App\Rules\CheckMobileNoRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -18,6 +19,10 @@ class ProfileUpdateRequest extends FormRequest
         return [
             'name' => ['string', 'max:255'],
             'email' => ['email', 'max:255', Rule::unique(User::class)->ignore($this->user()->id)],
+            'mobile_no' => ['required', 'string', 'max:10',
+                Rule::unique(User::class, 'mobile_no')->ignore($this->user()->id),
+                new CheckMobileNoRule,
+            ],
         ];
     }
 }

@@ -22,6 +22,7 @@ class UserSeeder extends Seeder
             'password' => bcrypt('password'),
             'email_verified_at' => now(),
             'remember_token' => Str::random(10),
+            'mobile_no' => '1734567892',
         ])->assignRole('admin');
 
         User::create([
@@ -30,6 +31,7 @@ class UserSeeder extends Seeder
             'password' => bcrypt('password'),
             'email_verified_at' => now(),
             'remember_token' => Str::random(10),
+            'mobile_no' => '1834567893',
         ])->assignRole('farmer');
 
         User::create([
@@ -38,10 +40,10 @@ class UserSeeder extends Seeder
             'password' => bcrypt('password'),
             'email_verified_at' => now(),
             'remember_token' => Str::random(10),
+            'mobile_no' => '1934567894',
         ])->assignRole('customer');
 
         $roles = ['farmer', 'customer'];
-
-        User::factory(50)->create()->each(fn($user) => $user->assignRole(Arr::random($roles)));
+        User::factory(97)->create()->each(fn($user) => $user->assignRole(Arr::random($roles)));
     }
 }
