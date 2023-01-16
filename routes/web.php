@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -21,8 +22,11 @@ Route::get('/', function () {
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::view('/dashboard', 'dashboard')->name('dashboard');
-    Route::resource('users', UserController::class)->only('index', 'destroy')
-        ->middleware('role:admin');
+
+    Route::middleware('role:admin')->group(function () {
+        Route::resource('users', UserController::class)->only('index', 'destroy');
+        Route::resource('categories', CategoryController::class)->except('show');
+    });
 });
 
 Route::middleware('auth')->group(function () {
