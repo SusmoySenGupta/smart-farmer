@@ -23,6 +23,9 @@
                             @csrf
                             @method('put')
                             @include('categories.form')
+                            <div class="flex items-center gap-4">
+                                <x-primary-button>{{ __('Update Category') }}</x-primary-button>
+                            </div>
                         </form>
                     </section>
                 </div>

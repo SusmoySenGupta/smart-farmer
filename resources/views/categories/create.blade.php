@@ -22,6 +22,9 @@
                         <form method="post" action="{{ route('categories.store') }}" class="mt-6 space-y-6">
                             @csrf
                             @include('categories.form')
+                            <div class="flex items-center gap-4">
+                                <x-primary-button>{{ __('Create Category') }}</x-primary-button>
+                            </div>
                         </form>
                     </section>
                 </div>
