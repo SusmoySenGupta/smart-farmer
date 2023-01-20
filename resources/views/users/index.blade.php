@@ -12,8 +12,8 @@
                     <p class="hidden text-sm text-gray-400 sm:block">Total users: <span class="font-bold">{{ $users->total() }}</span></p>
                     <div>
                         <label for="table-search" class="sr-only">Search</label>
-                        <form action="{{ route('users.index') }}" method="GET" class="flex flex-col items-start gap-1">
-                            <x-search-box name="search" value="{{ old('search', request()->get('search')) }}" placeholder="Search users..." class="w-full" required />
+                        <form action="{{ route('admin.users.index') }}" method="GET" class="flex flex-col items-start gap-1">
+                            <x-search-box name="search" route="{{ route('admin.users.index') }}" value="{{ old('search', request()->get('search')) }}" placeholder="Search users..." class="w-full" required />
                         </form>
                     </div>
                 </div>
@@ -75,7 +75,7 @@
                                     </td>
                                     <td class="px-6 py-4">
                                         @if (auth()->user()->id != $user->id)
-                                            <form action="{{ route('users.destroy', $user) }}" method="POST" onsubmit="return confirm('Are you sure you want to destroy this user?')">
+                                            <form action="{{ route('admin.users.destroy', $user) }}" method="POST" onsubmit="return confirm('Are you sure you want to destroy this user?')">
                                                 @csrf
                                                 @method('DELETE')
                                                 <x-danger-button>

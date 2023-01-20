@@ -46,7 +46,7 @@ class CategoryController extends Controller
     {
         Category::create($request->validated());
 
-        return redirect()->route('categories.index')->with('success', 'Category created.');
+        return redirect()->route('admin.categories.index')->with('success', 'Category created.');
     }
 
     /**
@@ -71,7 +71,7 @@ class CategoryController extends Controller
     {
         $category->update($request->validated());
 
-        return redirect()->route('categories.index')->with('success', 'Category updated.');
+        return redirect()->route('admin.categories.index')->with('success', 'Category updated.');
     }
 
     /**
@@ -82,9 +82,9 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category): RedirectResponse
     {
-        // if ($category?->products()?->exists()) {
-        //     return back()->with('error', 'Category has products.');
-        // }
+        if ($category?->products()?->exists()) {
+            return back()->with('error', 'Category has products.');
+        }
 
         $category->delete();
 

@@ -5,30 +5,32 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class DashboardController extends Controller
 {
     /**
      * Handle the incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\View\View
      */
-    public function __invoke(Request $request)
+    public function __invoke(): View
     {
-        $latestUsers = User::latest()->take(5)->get();
-        $latestProducts = Product::active()->with(['category', 'user'])->latest()->take(5)->get();
+        $view = 'dashboard';
+        $viewData = [];
 
-        $totalUserCount = User::count();
-        $totalProductCount = Product::active()->count();
-        $totalOrderCount = 0;
+        if (auth()->user()->hasRole('admin')) {
+            $view = 'admin-dashboard';
+            $viewData = [
+                'latestUsers' => User::latest()->take(5)->get(),
+                'latestProducts' => Product::active()->with(['category', 'user'])->latest()->take(5)->get(),
 
-        return view('dashboard', compact(
-            'latestUsers',
-            'latestProducts',
-            'totalUserCount',
-            'totalProductCount',
-            'totalOrderCount'
-        ));
+                'totalUserCount' => User::count(),
+                'totalProductCount' => Product::active()->count(),
+                'totalOrderCount' => 0,
+            ];
+        }
+
+        return view($view, $viewData);
     }
 }

@@ -9,11 +9,11 @@
         <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
             <div class="p-4 overflow-hidden bg-white shadow sm:p-8 dark:bg-gray-800 sm:rounded-lg">
                 <div class="flex flex-col-reverse gap-4 mb-4 sm:flex-row sm:items-center sm:justify-between">
-                    <a href="{{ route('categories.create') }}" class="link-btn-secondary">
+                    <a href="{{ route('admin.categories.create') }}" class="link-btn-secondary">
                         {{ __('Create Category') }}
                     </a>
-                    <form action="{{ route('categories.index') }}" method="GET">
-                        <x-search-box name="search" value="{{ old('search', request()->get('search')) }}" placeholder="Search categories..." class="w-full" required />
+                    <form action="{{ route('admin.categories.index') }}" method="GET">
+                        <x-search-box name="search" route="{{ route('admin.categories.index') }}" value="{{ old('search', request()->get('search')) }}" placeholder="Search categories..." class="w-full" required />
                     </form>
                 </div>
                 <!-- Categories Table -->
@@ -61,10 +61,10 @@
                                     </td>
 
                                     <td class="flex items-center justify-center gap-4 px-6 py-4">
-                                        <a href="{{ route('categories.edit', $category) }}" class="link-btn">
+                                        <a href="{{ route('admin.categories.edit', $category) }}" class="link-btn">
                                             {{ __('Edit') }}
                                         </a>
-                                        <form action="{{ route('categories.destroy', $category) }}" method="POST" onsubmit="return confirm('Are you sure you want to destroy this category?')">
+                                        <form action="{{ route('admin.categories.destroy', $category) }}" method="POST" onsubmit="return confirm('Are you sure you want to destroy this category?')">
                                             @csrf
                                             @method('DELETE')
                                             <x-danger-button>

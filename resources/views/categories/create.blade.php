@@ -19,7 +19,7 @@
                                 {{ __('You can create a new category here.') }}
                             </p>
                         </header>
-                        <form method="post" action="{{ route('categories.store') }}" class="mt-6 space-y-6">
+                        <form method="post" action="{{ route('admin.categories.store') }}" class="mt-6 space-y-6">
                             @csrf
                             @include('categories.form')
                             <div class="flex items-center gap-4">
