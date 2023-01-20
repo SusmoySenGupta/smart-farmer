@@ -48,11 +48,11 @@
     </div>
 
     <div class="pb-6">
-        <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
+        <div class="w-full mx-auto md:max-w-7xl sm:px-6 lg:px-8">
             <div class="px-6 overflow-hidden">
                 <div class="grid gap-6 mb-8 lg:grid-cols-2">
                     <!-- Latest Users Card -->
-                    <div class="w-full max-w-xl p-4 bg-white border rounded-lg shadow-md sm:p-8 dark:bg-gray-800 dark:border-gray-700">
+                    <div class="w-full p-4 bg-white border rounded-lg shadow-md sm:p-8 dark:bg-gray-800 dark:border-gray-700">
                         <div class="flex items-center justify-between mb-4">
                             <h5 class="text-xl font-bold leading-none text-gray-900 dark:text-white">Latest Users</h5>
                             <a href="{{ route('users.index') }}" class="text-sm font-medium text-blue-600 hover:underline dark:text-blue-500">
@@ -98,7 +98,7 @@
                     </div>
 
                     <!-- Latest Products Card -->
-                    <div class="w-full max-w-xl p-4 bg-white border rounded-lg shadow-md sm:p-8 dark:bg-gray-800 dark:border-gray-700">
+                    <div class="w-full p-4 bg-white border rounded-lg shadow-md sm:p-8 dark:bg-gray-800 dark:border-gray-700">
                         <div class="flex items-center justify-between mb-4">
                             <h5 class="text-xl font-bold leading-none text-gray-900 dark:text-white">Latest Products</h5>
                             <a href="{{ route('products.index') }}" class="text-sm font-medium text-blue-600 hover:underline dark:text-blue-500">

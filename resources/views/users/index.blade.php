@@ -5,35 +5,21 @@
         </h2>
     </x-slot>
 
-
-    <div class="py-12">
-        <div class="mx-auto space-y-6 max-w-7xl sm:px-6 lg:px-8">
+    <div class="pt-12 pb-4">
+        <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
             <div class="p-4 overflow-hidden bg-white shadow sm:p-8 dark:bg-gray-800 sm:rounded-lg">
-                <section class="overflow-x-auto rounded-lg">
-                    <div class="flex flex-col gap-4 pb-4 sm:flex-row sm:items-center sm:justify-between">
-                        <p class="hidden text-sm text-gray-400 sm:block">Total users: <span class="font-bold">{{ $users->total() }}</span></p>
-
+                <div class="flex flex-col h-full gap-4 mb-4 sm:flex-row sm:items-center sm:justify-between">
+                    <p class="hidden text-sm text-gray-400 sm:block">Total users: <span class="font-bold">{{ $users->total() }}</span></p>
+                    <div>
                         <label for="table-search" class="sr-only">Search</label>
-                        <!-- Search form -->
-                        <form action="{{ route('users.index') }}" method="GET" class="flex flex-col items-start gap-1 mt-1">
-                            <div class="flex items-center">
-                                <x-search-box name="search" value="{{ old('search', request()->get('search')) }}" placeholder="Search users..." class="w-full" required />
-                            </div>
-                            @if (request()->has('search'))
-                                <p class="mt-1 text-xs text-gray-500">
-                                    Showing results for <span class="font-semibold"> {{ request()->get('search') }} </span>
-                                    <a href="{{ route('users.index') }}">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="inline-block w-4 h-4">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
-                                        </svg>
-                                    </a>
-                                </p>
-                            @endif
+                        <form action="{{ route('users.index') }}" method="GET" class="flex flex-col items-start gap-1">
+                            <x-search-box name="search" value="{{ old('search', request()->get('search')) }}" placeholder="Search users..." class="w-full" required />
                         </form>
                     </div>
-
-                    <!-- Users Table -->
-                    <table class="w-full text-sm text-left text-gray-500 border rounded-lg dark:text-gray-400">
+                </div>
+                <!-- Users Table -->
+                <div class="overflow-x-auto border rounded-lg dark:border-gray-700">
+                    <table class="w-full overflow-hidden text-sm text-left text-gray-500 border rounded-lg dark:text-gray-400">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                             <tr>
                                 <th scope="col" class="px-6 py-3">
@@ -45,7 +31,7 @@
                                 <th scope="col" class="px-6 py-3">
                                     Role
                                 </th>
-                                <th scope="col" class="px-6 py-3">
+                                <th scope="col" class="px-6 py-3 whitespace-nowrap">
                                     Created At
                                 </th>
                                 <th scope="col" class="px-6 py-3">
@@ -68,7 +54,7 @@
                                             <div class="font-normal text-gray-500">{{ $user->email }}</div>
                                         </div>
                                     </th>
-                                    <td class="px-6 py-4">
+                                    <td class="px-6 py-4 whitespace-nowrap">
                                         @if ($user->mobile_no)
                                             +880
                                         @endif
@@ -79,8 +65,13 @@
                                             {{ $user?->roles?->first()?->name ?? 'N/A' }}
                                         </span>
                                     </td>
-                                    <td class="px-6 py-4">
-                                        {{ $user->created_at->diffForHumans() }}
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="bg-gray-100 text-gray-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded mr-2 dark:bg-gray-700 dark:text-gray-400 border border-gray-200 dark:border-gray-600">
+                                            <svg aria-hidden="true" class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path>
+                                            </svg>
+                                            {{ $user->created_at->diffForHumans() }}
+                                        </span>
                                     </td>
                                     <td class="px-6 py-4">
                                         @if (auth()->user()->id != $user->id)
@@ -103,15 +94,16 @@
                             @endforelse
                         </tbody>
                     </table>
-                    <p class="block my-2 text-sm text-gray-400 sm:hidden ">
-                        Showing <span class="font-bold">{{ $users->firstItem() }}</span> to <span class="font-bold">{{ $users->lastItem() }}</span> of
-                        <span class="font-bold">{{ $users->total() }}</span> users
-                    </p>
+                </div>
 
-                    <div class="my-4">
-                        {{ $users->links() }}
-                    </div>
-                </section>
+                <!-- Pagination -->
+                <p class="block my-2 text-sm text-gray-400 sm:hidden ">
+                    Showing <span class="font-bold">{{ $users->firstItem() }}</span> to <span class="font-bold">{{ $users->lastItem() }}</span> of
+                    <span class="font-bold">{{ $users->total() }}</span> users
+                </p>
+                <div class="my-4">
+                    {{ $users->links() }}
+                </div>
             </div>
         </div>
     </div>

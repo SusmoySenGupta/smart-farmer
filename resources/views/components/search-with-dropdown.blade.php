@@ -1,7 +1,7 @@
 @props(['disabled' => false])
 
-<div class="flex items-center px-2">
-    <select id="search_by" name="search_by" class="bg-gray-50  border border-r-0 rounded-r-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+<div class="flex items-center w-full md:w-auto">
+    <select id="search_by" name="search_by" class="bg-gray-50 border border-r-0 rounded-r-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
         {{ $slot }}
     </select>
     <input type="text" id="dropdown-search" required {!! $attributes->merge(['class' => 'bg-gray-50 rounded-l-none border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500']) !!}>
@@ -12,3 +12,13 @@
         <span class="sr-only">Search</span>
     </button>
 </div>
+@if (request()->has('search'))
+    <p class="mt-1 text-xs text-gray-500">
+        Showing results for <span class="font-semibold"> {{ request()->get('search') }} </span>
+        <a href="{{ route('products.index') }}">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="inline-block w-4 h-4">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+        </a>
+    </p>
+@endif
