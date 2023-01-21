@@ -27,7 +27,6 @@ class DashboardController extends Controller
 
                 'totalUserCount' => User::count(),
                 'totalProductCount' => Product::active()->count(),
-                'totalOrderCount' => 0,
             ];
         }
 

@@ -25,7 +25,7 @@ Route::get('/', function () {
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', DashboardController::class)->name('dashboard');
 
-    Route::prefix('admin')->as('admin.')->middleware('role:admin')->group(function () {
+    Route::middleware('role:admin')->group(function () {
         Route::resource('users', UserController::class)->only('index', 'destroy');
         Route::resource('categories', CategoryController::class)->except('show');
         Route::resource('products', ProductController::class)->except('create', 'store');

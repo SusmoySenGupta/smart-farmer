@@ -19,7 +19,7 @@
                                 {{ __('You can create this category here.') }}
                             </p>
                         </header>
-                        <form method="post" action="{{ route('admin.categories.update', $category) }}" class="mt-6 space-y-6">
+                        <form method="post" action="{{ route('categories.update', $category) }}" class="mt-6 space-y-6">
                             @csrf
                             @method('put')
                             @include('categories.form')

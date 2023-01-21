@@ -13,7 +13,7 @@
 
                     <label for="table-search" class="sr-only">Search</label>
                     <!-- Search form -->
-                    <form action="{{ route('admin.products.index') }}" method="GET">
+                    <form action="{{ route('products.index') }}" method="GET">
                         @php
                             $searchByOptions = [
                                 'title' => 'Title',
@@ -21,7 +21,7 @@
                                 'created_by' => 'Created By',
                             ];
                         @endphp
-                        <x-search-with-dropdown name="search" route="{{ route('admin.products.index') }}" value="{{ old('search', request()->get('search')) }}" placeholder="Search products..." class="w-full" required>
+                        <x-search-with-dropdown name="search" route="{{ route('products.index') }}" value="{{ old('search', request()->get('search')) }}" placeholder="Search products..." class="w-full" required>
                             @foreach ($searchByOptions as $value => $label)
                                 <option value="{{ $value }}" {{ request()->get('search_by') == $value ? 'selected' : '' }}>{{ $label }}</option>
                             @endforeach
@@ -90,7 +90,7 @@
                                         <span class="text-base">{{ $product->user->name }}</span>
                                     </td>
                                     <td class="px-6 py-4">
-                                        <form action="{{ route('admin.products.destroy', $product) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this product?')">
+                                        <form action="{{ route('products.destroy', $product) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this product?')">
                                             @csrf
                                             @method('DELETE')
                                             <x-danger-button>
