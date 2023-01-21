@@ -92,7 +92,7 @@
             <div class="flex flex-col w-full mb-20 text-center">
                 <h1 class="text-2xl font-medium text-gray-900 sm:text-3xl title-font">Latest Products</h1>
             </div>
-            <div class="grid grid-cols-4 gap-4 -m-4">
+            <div class="grid grid-cols-1 gap-4 -m-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                 @foreach (range(1, 8) as $products)
                     <div class="w-full p-4 border rounded-md ">
                         <a class="relative block h-48 overflow-hidden rounded">
