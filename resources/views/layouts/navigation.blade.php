@@ -15,15 +15,22 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
-                    @hasanyrole('admin')
+                    @hasrole('admin')
                         <x-nav-link :href="route('users.index')" :active="request()->routeIs('users.*')">
                             {{ __('Users') }}
                         </x-nav-link>
                         <x-nav-link :href="route('categories.index')" :active="request()->routeIs('categories.*')">
                             {{ __('Categories') }}
                         </x-nav-link>
+                    @endhasrole
+                    @hasanyrole('admin|farmer')
                         <x-nav-link :href="route('products.index')" :active="request()->routeIs('products.*')">
                             {{ __('Products') }}
+                        </x-nav-link>
+                    @endhasanyrole
+                    @hasanyrole('farmer|customer')
+                        <x-nav-link :href="route('orders.index')" :active="request()->routeIs('orders.*')">
+                            {{ __('Orders') }}
                         </x-nav-link>
                     @endhasanyrole
                 </div>
@@ -93,16 +100,26 @@
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
-            @hasanyrole('admin')
+
+            @hasrole('admin')
                 <x-responsive-nav-link :href="route('users.index')" :active="request()->routeIs('users.*')">
                     {{ __('Users') }}
                 </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('categories.index')" :active="request()->routeIs('categories.*')">
                     {{ __('Categories') }}
                 </x-responsive-nav-link>
-                <x-responsive-nav-link :href="route('products.index')" :active="request()->routeIs('products.*')">
+            @endhasrole
+
+            @hasanyrole('admin|farmer')
+                <x-nav-link :href="route('products.index')" :active="request()->routeIs('products.*')">
                     {{ __('Products') }}
-                </x-responsive-nav-link>
+                </x-nav-link>
+            @endhasanyrole
+
+            @hasanyrole('farmer|customer')
+                <x-nav-link :href="route('orders.index')" :active="request()->routeIs('orders.*')">
+                    {{ __('Orders') }}
+                </x-nav-link>
             @endhasanyrole
         </div>
 

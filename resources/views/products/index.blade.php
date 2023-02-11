@@ -9,7 +9,14 @@
         <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
             <div class="p-4 overflow-hidden bg-white shadow sm:p-8 dark:bg-gray-800 sm:rounded-lg">
                 <div class="flex flex-col-reverse gap-4 mb-4 sm:flex-row sm:items-center sm:justify-between">
-                    <p class="hidden text-sm text-gray-400 sm:block">Total products: <span class="font-bold">{{ $products->total() }}</span></p>
+                    @hasrole('farmer')
+                        <a href="{{ route('products.create') }}" class="link-btn-secondary">
+                            {{ __('Create Product') }}
+                        </a>
+                    @endhasrole
+                    @hasrole('admin')
+                        <p class="hidden text-sm text-gray-400 sm:block">Total products: <span class="font-bold">{{ $products->total() }}</span></p>
+                    @endhasrole
 
                     <label for="table-search" class="sr-only">Search</label>
                     <!-- Search form -->
@@ -45,13 +52,18 @@
                                 <th scope="col" class="px-6 py-3">
                                     Category
                                 </th>
-                                <th scope="col" class="px-6 py-3">
+                                <th scope="col" class="px-6 py-3 whitespace-nowrap">
+                                    Stock (Kg)
+                                </th>
+                                <th scope="col" class="px-6 py-3 whitespace-nowrap">
                                     Status
                                 </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Created By
-                                </th>
-                                <th scope="col" class="px-6 py-3">
+                                @hasrole('admin')
+                                    <th scope="col" class="px-6 py-3 whitespace-nowrap">
+                                        Created By
+                                    </th>
+                                @endhasrole
+                                <th scope="col" class="px-6 py-3 whitespace-nowrap">
                                     Action
                                 </th>
                             </tr>
@@ -60,14 +72,16 @@
                             @forelse ($products as $product)
                                 <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                                     <!-- Title -->
-                                    <td scope="row" class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
-                                        <div class="text-base font-semibold">
-                                            {{ $product->title }}
-                                        </div>
+                                    <td scope="row" class="px-6 py-4 whitespace-nowrap">
+                                        <p class="text-base font-semibold text-gray-900 dark:text-gray-100">{{ $product->title }}</p>
                                     </td>
                                     <!-- Image -->
                                     <td class="px-6 py-4">
-                                        <img src="https://ui-avatars.com/api/?name={{ $product->title }}" alt="{{ $product->title }}" class="object-cover w-20 h-20">
+                                        @if ($product->image_url == null)
+                                            <img src="https://dummyimage.com/200x200/000000/ffffff.png&text=No+Image" alt="{{ $product->title }}" class="object-cover w-20 h-20">
+                                        @else
+                                            <img src="{{ Storage::url($product->image_url) }}" alt="{{ $product->title }}" class="object-cover w-20 h-20">
+                                        @endif
                                     </td>
                                     <!-- Price -->
                                     <td class="px-6 py-4">
@@ -77,6 +91,10 @@
                                     <td class="px-6 py-4">
                                         <span class="text-base">{{ $product->category->title }}</span>
                                     </td>
+                                    <!-- Stock -->
+                                    <td class="px-6 py-4">
+                                        <span class="text-base">{{ $product->stock }}</span>
+                                    </td>
                                     <!-- Status -->
                                     <td class="px-6 py-4">
                                         @if ($product->is_active)
@@ -85,18 +103,28 @@
                                             <span class="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">Inactive</span>
                                         @endif
                                     </td>
-                                    <!-- Created By -->
+                                    @hasrole('admin')
+                                        <!-- Created By -->
+                                        <td class="px-6 py-4">
+                                            <span class="text-base">{{ $product->user->name }}</span>
+                                        </td>
+                                    @endhasrole
+                                    <!-- Action -->
                                     <td class="px-6 py-4">
-                                        <span class="text-base">{{ $product->user->name }}</span>
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        <form action="{{ route('products.destroy', $product) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this product?')">
-                                            @csrf
-                                            @method('DELETE')
-                                            <x-danger-button>
-                                                {{ __('Delete') }}
-                                            </x-danger-button>
-                                        </form>
+                                        <div class="flex gap-4">
+                                            @hasrole('farmer')
+                                                <a href="{{ route('products.edit', $product) }}" class="link-btn">
+                                                    {{ __('Edit') }}
+                                                </a>
+                                            @endhasrole
+                                            <form action="{{ route('products.destroy', $product) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this product?')">
+                                                @csrf
+                                                @method('DELETE')
+                                                <x-danger-button>
+                                                    {{ __('Delete') }}
+                                                </x-danger-button>
+                                            </form>
+                                        </div>
                                     </td>
                                 </tr>
                             @empty

@@ -24,7 +24,7 @@ class ProductFactory extends Factory
             'price' => $this->faker->numberBetween(100, 10000),
             'stock' => $this->faker->numberBetween(0, 100),
             'is_active' => $this->faker->boolean,
-            'image_url' => $this->faker->imageUrl(),
+            'image_url' => null,
             'category_id' => $this->faker->numberBetween(1, 10),
             'user_id' => $this->faker->randomElement([2, 4]),
         ];

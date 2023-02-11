@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
@@ -18,22 +19,26 @@ use Illuminate\Support\Facades\Route;
 |
  */
 
+/* ---------------------------------- Public routes ---------------------------------- */
 Route::get('/', function () {
     return view('welcome');
 });
 
+/* ---------------------------------- Email verified routes ---------------------------------- */
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', DashboardController::class)->name('dashboard');
+    Route::resource('products', ProductController::class)->middleware('role:admin|farmer');
 
     Route::middleware('role:admin')->group(function () {
         Route::resource('users', UserController::class)->only('index', 'destroy');
         Route::resource('categories', CategoryController::class)->except('show');
-        Route::resource('products', ProductController::class)->except('create', 'store');
     });
 
-    Route::resource('products', ProductController::class);
+    Route::post('orders/{order}/mark-as-delivered', [OrderController::class, 'markAsDelivered'])->name('orders.mark-as-delivered');
+    Route::resource('orders', OrderController::class);
 });
 
+/* ---------------------------------- Auth routes ---------------------------------- */
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

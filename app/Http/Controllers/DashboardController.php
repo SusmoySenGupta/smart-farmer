@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Order;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -16,20 +17,31 @@ class DashboardController extends Controller
      */
     public function __invoke(): View
     {
-        $view = 'dashboard';
-        $viewData = [];
+        $user = auth()->user();
 
-        if (auth()->user()->hasRole('admin')) {
-            $view = 'admin-dashboard';
-            $viewData = [
-                'latestUsers' => User::latest()->take(5)->get(),
-                'latestProducts' => Product::active()->with(['category', 'user'])->latest()->take(5)->get(),
+        $viewAndData = collect([
+            'admin' => [
+                'view' => 'dashboard.admin-dashboard',
+                'data' => [
+                    'latestUsers' => User::latest()->take(5)->get(),
+                    'latestProducts' => Product::active()->with(['category', 'user'])->latest()->take(5)->get(),
 
-                'totalUserCount' => User::count(),
-                'totalProductCount' => Product::active()->count(),
-            ];
-        }
+                    'totalUserCount' => User::count(),
+                    'totalProductCount' => Product::active()->count(),
+                ],
+            ],
+            'farmer' => [
+                'view' => 'dashboard.farmer-dashboard',
+                'data' => [
+                    'latestProducts' => $user->products()->with('category')->latest()->take(5)->get(),
+                    'latestOrders' => Order::where('farmer_id', $user->id)->with('customer')->latest()->take(5)->get(),
 
-        return view($view, $viewData);
+                    'productsCount' => Product::active()->count(),
+                    'pendingOrderCount' => Order::pending()->where('farmer_id', $user->id)->count(),
+                ],
+            ],
+        ])->get($user?->roles?->first()?->name ?? 'guest');
+
+        return view($viewAndData['view'], $viewAndData['data']);
     }
 }
