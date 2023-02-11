@@ -40,6 +40,14 @@ class DashboardController extends Controller
                     'pendingOrderCount' => Order::pending()->where('farmer_id', $user->id)->count(),
                 ],
             ],
+            'customer' => [
+                'view' => 'dashboard.customer-dashboard',
+                'data' => [
+                    'latestOrders' => Order::where('customer_id', $user->id)->with('products')->latest()->take(5)->get(),
+                    'pendingOrderCount' => Order::pending()->where('customer_id', $user->id)->count(),
+                    'balance' => $user->balance,
+                ],
+            ],
         ])->get($user?->roles?->first()?->name ?? 'guest');
 
         return view($viewAndData['view'], $viewAndData['data']);

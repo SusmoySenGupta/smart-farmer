@@ -34,8 +34,8 @@
 
         <!-- Page Heading -->
         @if (isset($header))
-            <header class="bg-white dark:bg-gray-800 shadow">
-                <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+            <header class="bg-white shadow dark:bg-gray-800">
+                <div class="px-4 py-6 mx-auto max-w-7xl sm:px-6 lg:px-8">
                     {{ $header }}
                 </div>
             </header>
@@ -46,8 +46,18 @@
             {{ $slot }}
         </main>
     </div>
-    <script src="{{ asset('js/flowbit.min.js') }}"></script>
 
+    @if (Session::has('success'))
+        <x-alert type="success"> {{ Session::get('success') }} </x-alert>
+    @elseif (Session::has('error'))
+        <x-alert type="error"> {{ Session::get('error') }} </x-alert>
+    @elseif (Session::has('warning'))
+        <x-alert type="warning"> {{ Session::get('warning') }} </x-alert>
+    @elseif (Session::has('info'))
+        <x-alert type="info"> {{ Session::get('info') }} </x-alert>
+    @endif
+
+    <script src="{{ asset('js/flowbit.min.js') }}"></script>
     <script src="{{ asset('js/darkmode.js') }}"></script>
 </body>
 

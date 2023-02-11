@@ -1,10 +1,12 @@
 <?php
 
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PublicController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -20,14 +22,17 @@ use Illuminate\Support\Facades\Route;
  */
 
 /* ---------------------------------- Public routes ---------------------------------- */
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [PublicController::class, 'welcome'])->name('welcome');
+Route::get('/farmers', [PublicController::class, 'farmer'])->name('farmers');
 
 /* ---------------------------------- Email verified routes ---------------------------------- */
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', DashboardController::class)->name('dashboard');
     Route::resource('products', ProductController::class)->middleware('role:admin|farmer');
+    Route::get('/farmers/{farmer}/products', [PublicController::class, 'product'])->middleware('role:customer')->name('farmer.products');
+    Route::put('/cart/{product}/product', [CartController::class, 'update'])->middleware('role:customer')->name('cart.update');
+    Route::delete('/cart/{product}/product', [CartController::class, 'destroyProduct'])->middleware('role:customer')->name('cart.destroy-product');
+    Route::resource('/cart', CartController::class)->middleware('role:customer')->only('index', 'store', 'destroy');
 
     Route::middleware('role:admin')->group(function () {
         Route::resource('users', UserController::class)->only('index', 'destroy');
@@ -40,6 +45,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 /* ---------------------------------- Auth routes ---------------------------------- */
 Route::middleware('auth')->group(function () {
+    Route::patch('/users/{user}/update-balance', [UserController::class, 'updateBalance'])->name('users.update-balance');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');

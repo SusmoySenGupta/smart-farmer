@@ -11,7 +11,7 @@
                 <div class="w-full p-4 overflow-hidden bg-white shadow sm:p-8 dark:bg-gray-800 sm:rounded-lg">
                     <div class="flex items-start justify-between gap-6 space-y-2">
                         <div>
-                            <h2 class="text-xl font-semibold leading-tight text-gray-800 text-md dark:text-gray-200 flex items-center gap-2">
+                            <h2 class="flex items-center gap-2 text-xl font-semibold leading-tight text-gray-800 text-md dark:text-gray-200">
                                 Order No: <span class="pill-badge-info">#{{ $order->id }}</span>
                             </h2>
                             <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">Placed on: {{ $order->created_at->format('d M Y H:i') }}</p>
@@ -77,19 +77,32 @@
                         </form>
                     @endif
                 </div>
-                <div class="w-full p-4 overflow-hidden bg-white shadow md:w-1/2 sm:p-8 dark:bg-gray-800 sm:rounded-lg">
-                    <h2 class="text-xl font-semibold leading-tight text-gray-800 text-md dark:text-gray-200">
-                        Customer Details
-                    </h2>
-                    <ul class="mt-4 space-y-1 text-sm text-gray-600 dark:text-gray-400">
-                        <li>Name: {{ $order->customer->name }}</li>
-                        <li>Email: {{ $order->customer->email }}</li>
-                        <li>Phone: +880{{ $order->customer->mobile_no }}</li>
-                        <li>Address: {{ $order->address }}</li>
-                    </ul>
-                </div>
+                @hasrole('farmer')
+                    <div class="w-full p-4 overflow-hidden bg-white shadow md:w-1/2 sm:p-8 dark:bg-gray-800 sm:rounded-lg">
+                        <h2 class="text-xl font-semibold leading-tight text-gray-800 text-md dark:text-gray-200">
+                            Customer Details
+                        </h2>
+                        <ul class="mt-4 space-y-1 text-sm text-gray-600 dark:text-gray-400">
+                            <li>Name: {{ $order->customer->name }}</li>
+                            <li>Email: {{ $order->customer->email }}</li>
+                            <li>Phone: +880{{ $order->customer->mobile_no }}</li>
+                            <li>Address: {{ $order->address }}</li>
+                        </ul>
+                    </div>
+                @endhasrole
+                @hasrole('customer')
+                    <div class="w-full p-4 overflow-hidden bg-white shadow md:w-1/2 sm:p-8 dark:bg-gray-800 sm:rounded-lg">
+                        <h2 class="text-xl font-semibold leading-tight text-gray-800 text-md dark:text-gray-200">
+                            Farmer Details
+                        </h2>
+                        <ul class="mt-4 space-y-1 text-sm text-gray-600 dark:text-gray-400">
+                            <li>Name: {{ $order->farmer->name }}</li>
+                            <li>Email: {{ $order->farmer->email }}</li>
+                            <li>Phone: +880{{ $order->farmer->mobile_no }}</li>
+                        </ul>
+                    </div>
+                @endhasrole
             </div>
         </div>
     </div>
-
 </x-app-layout>

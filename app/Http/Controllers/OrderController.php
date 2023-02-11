@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class OrderController extends Controller
@@ -44,7 +45,47 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'address' => 'required|string|max:500',
+        ]);
+
+        $cart = auth()->user()->cart()->first();
+
+        if (!$cart) {
+            return redirect()->back()->withErrors('Your cart is empty.');
+        }
+
+        $totalPrice = $cart->products->sum(function ($product) {
+            return $product->price * $product->pivot->quantity;
+        });
+
+        if ($totalPrice > auth()->user()->balance) {
+            return redirect()->back()->withErrors('You do not have enough balance in your wallet to place this order.');
+        }
+
+        DB::beginTransaction();
+
+        $order = Order::create([
+            'farmer_id' => $cart->farmer_id,
+            'customer_id' => auth()->id(),
+            'address' => $request->address,
+            'total' => $totalPrice,
+        ]);
+
+        $order->products()->attach($cart->products->mapWithKeys(function ($product) {
+            return [$product->id => [
+                'quantity' => $product->pivot->quantity,
+                'amount' => $product->price,
+            ]];
+        }));
+
+        $cart->delete();
+        auth()->user()->update(['balance' => auth()->user()->balance - $totalPrice]);
+
+        DB::commit();
+
+        return redirect()->route('orders.show', $order)
+            ->with('success', 'Order placed successfully.');
     }
 
     /**

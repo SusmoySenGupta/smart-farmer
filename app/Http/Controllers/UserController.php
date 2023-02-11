@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
@@ -40,6 +41,23 @@ class UserController extends Controller
 
         $user->delete();
 
-        return redirect()->route('users.index');
+        return redirect()->route('users.index')->with('success', 'User deleted.');
+    }
+
+    /**
+     * @param User $user
+     * @param Request $request
+     */
+    public function updateBalance(User $user, Request $request)
+    {
+        $request->validate([
+            'balance' => 'required|numeric|min:10',
+        ]);
+
+        $user->update([
+            'balance' => $user->balance + $request->balance,
+        ]);
+
+        return redirect()->back()->with('success', 'Balance updated.');
     }
 }

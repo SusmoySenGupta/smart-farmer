@@ -50,4 +50,12 @@ class Category extends Model
             $category->slug = $slug;
         });
     }
+
+    /**
+     * @return mixed
+     */
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
 }

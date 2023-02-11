@@ -41,6 +41,7 @@ class UserSeeder extends Seeder
             'email_verified_at' => now(),
             'remember_token' => Str::random(10),
             'mobile_no' => '1934567894',
+            'balance' => 1000,
         ])->assignRole('customer');
 
         $roles = ['farmer', 'customer'];

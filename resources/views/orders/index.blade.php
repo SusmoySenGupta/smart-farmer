@@ -19,19 +19,24 @@
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                             <tr>
                                 <th scope="col" class="px-6 py-3">
-                                    Customer
+                                    @hasrole('farmer')
+                                        Customer
+                                    @endhasrole
+                                    @hasrole('customer')
+                                        Farmer
+                                    @endhasrole
                                 </th>
                                 <th scope="col" class="px-6 py-3">
                                     Order ID
                                 </th>
                                 <th scope="col" class="px-6 py-3">
-                                    Total
+                                    Total Amount (Tk)
                                 </th>
                                 <th scope="col" class="px-6 py-3 text-center whitespace-nowrap">
                                     Status
                                 </th>
                                 <th scope="col" class="px-6 py-3 text-center whitespace-nowrap">
-                                    Created At
+                                    Placed On
                                 </th>
                                 <th scope="col" class="px-6 py-3 text-center">
                                     Action
@@ -42,7 +47,12 @@
                             @forelse ($orders as $order)
                                 <tr class="border-t dark:border-gray-700">
                                     <td class="th-user-avatar">
-                                        <x-user-avatar :user="$order->customer" />
+                                        @hasrole('farmer')
+                                            <x-user-avatar :user="$order->customer" />
+                                        @endhasrole
+                                        @hasrole('customer')
+                                            <x-user-avatar :user="$order->farmer" />
+                                        @endhasrole
                                     </td>
                                     <td class="px-6 py-4">
                                         <span class="pill-badge-info">#{{ $order->id }}</span>
@@ -62,7 +72,7 @@
                                         @endif
                                     </td>
                                     <td class="px-6 py-4 text-center">
-                                        {{ $order->created_at->format('d/m/Y H:i') }}
+                                        {{ $order->created_at->format('d M Y, h:i a') }}
                                     </td>
                                     <td class="px-6 py-4">
                                         <div class="flex items-center justify-center gap-4">
@@ -74,7 +84,7 @@
                                                     auth()->user()->hasRole('farmer'))
                                                 <form action="{{ route('orders.mark-as-delivered', $order) }}" method="POST" onsubmit="return confirm('Are you sure you want to mark this order as delivered?')">
                                                     @csrf
-                                                    <button type="submit" class="link-btn">
+                                                    <button type="submit" class="link-btn whitespace-nowrap">
                                                         {{ __('Mark as delivered') }}
                                                     </button>
                                                 </form>

@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -24,6 +25,7 @@ class User extends Authenticatable
         'email',
         'password',
         'mobile_no',
+        'balance',
     ];
 
     /**
@@ -43,7 +45,28 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'balance' => 'integer',
     ];
+
+    /**
+     * Get users that are farmers.
+     */
+    public function scopeFarmer($query)
+    {
+        return $query->whereHas('roles', function ($query) {
+            $query->where('name', 'farmer');
+        });
+    }
+
+    /**
+     * Get users that are customers.
+     */
+    public function scopeCustomer($query)
+    {
+        return $query->whereHas('roles', function ($query) {
+            $query->where('name', 'customer');
+        });
+    }
 
     /**
      * Check if the user is a farmer.
@@ -86,6 +109,16 @@ class User extends Authenticatable
     }
 
     /**
+     * Get the products in stock for the user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function productsInStock(): HasMany
+    {
+        return $this->hasMany(Product::class)->where('stock', '>', 0);
+    }
+
+    /**
      * Get the orders for the user.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -93,5 +126,25 @@ class User extends Authenticatable
     public function orders(): HasMany
     {
         return $this->hasMany(Order::class);
+    }
+
+    /**
+     * Get the orders for the farmers.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function farmerOrders(): HasMany
+    {
+        return $this->hasMany(Order::class, 'farmer_id', 'id');
+    }
+
+    /**
+     * Get the cart for the user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function cart(): HasOne
+    {
+        return $this->hasOne(Cart::class);
     }
 }
